@@ -1,0 +1,20 @@
+#multi-roll-chat-window {
+    border: 2px solid #6f6c66;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 3px;
+}
+
+#multi-roll-target-name {
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+#multi-roll-damage-buttons + #multi-roll-target-name {
+    margin-top: 3px;
+}
+#multi-roll-target-name + #multi-roll-target-name {
+    margin-top: 3px;
+}

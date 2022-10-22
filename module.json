@@ -1,0 +1,34 @@
+{
+	"id": "pf2e-multi-roll",
+	"title": "PF2e Multi-Roll",
+	"description": "QoL module for improving rolling multiple attack rolls / saving throws in Pathfinder 2e.",
+	"version": "This is replaced",
+	"authors": [
+		{
+			"name": "MrVauxs",
+			"flags": {}
+		}
+	],
+	"compatibility": {
+		"minimum": "10",
+		"verified": "10"
+	},
+	"relationships": {
+		"systems": [
+			{
+				"id": "pf2e",
+				"type": "system",
+				"compatibility": {}
+			}
+		]
+	},
+	"url": "https://github.com/MrVauxs/PF2e-Target-Damage",
+	"manifest": "This is replaced",
+	"download": "This is replaced",
+	"readme": "https://github.com/MrVauxs/PF2e-Target-Damage",
+	"bugs": "https://github.com/MrVauxs/PF2e-Target-Damage/issues",
+	"changelog": "https://github.com/MrVauxs/PF2e-Target-Damage/blob/master/CHANGELOG.md",
+	"esmodules": [
+		"scripts/multi-roll.js"
+	]
+}
