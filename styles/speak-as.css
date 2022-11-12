@@ -1,0 +1,21 @@
+.speak-as--currentSpeaker {
+    flex: 0 !important;
+    /* padding: 3px 0.5em; */
+    margin: 0px 8px;
+}
+
+.speak-as--currentSpeaker--text {
+    margin: 0 4px;
+    font-size: var(--font-size-20);
+    line-height: 28px;
+}
+
+.speak-as--currentSpeaker--icon {
+    font-size: var(--font-size-20);
+    line-height: 28px;
+}
+
+.speak-as--currentSpeaker #context-menu {
+    max-height: 50vh;
+    overflow-y: auto;
+}

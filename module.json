@@ -1,7 +1,7 @@
 {
-	"id": "pf2e-multi-roll",
-	"title": "PF2e Multi-Roll",
-	"description": "QoL module for improving rolling multiple attack rolls / saving throws in Pathfinder 2e.",
+	"id": "speak-as",
+	"title": "Speak As",
+	"description": "QoL module telling you who you are <b>speaking as</b>.",
 	"version": "This is replaced",
 	"authors": [
 		{
@@ -13,22 +13,23 @@
 		"minimum": "10",
 		"verified": "10"
 	},
-	"relationships": {
-		"systems": [
-			{
-				"id": "pf2e",
-				"type": "system",
-				"compatibility": {}
-			}
-		]
-	},
-	"url": "https://github.com/MrVauxs/PF2e-Target-Damage",
+	"url": "https://github.com/MrVauxs/speak-as",
 	"manifest": "This is replaced",
 	"download": "This is replaced",
-	"readme": "https://github.com/MrVauxs/PF2e-Target-Damage",
-	"bugs": "https://github.com/MrVauxs/PF2e-Target-Damage/issues",
-	"changelog": "https://github.com/MrVauxs/PF2e-Target-Damage/blob/master/CHANGELOG.md",
+	"readme": "https://github.com/MrVauxs/speak-as",
+	"bugs": "https://github.com/MrVauxs/speak-as/issues",
+	"changelog": "https://github.com/MrVauxs/speak-as/blob/master/CHANGELOG.md",
 	"esmodules": [
-		"scripts/multi-roll.js"
+		"scripts/speak-as.js"
+	],
+	"styles": [
+		"styles/speak-as.css"
+	],
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "languages/en.json"
+		}
 	]
 }
