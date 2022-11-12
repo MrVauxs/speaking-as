@@ -1,6 +1,6 @@
 {
-	"id": "speak-as",
-	"title": "Speak As",
+	"id": "speaking-as",
+	"title": "Speaking As",
 	"description": "QoL module telling you who you are <b>speaking as</b>.",
 	"version": "This is replaced",
 	"authors": [
