@@ -11,8 +11,8 @@ Hooks.on("init", async () => {
 });
 */
 
-const KEY = 'speak-as';
-const NAME = "Speak As";
+const KEY = 'speaking-as';
+const NAME = "Speaking As";
 const CSS_PREFIX = `${KEY}--`;
 
 const _log = (logFN, ...args) => {

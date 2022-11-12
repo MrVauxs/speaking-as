@@ -13,17 +13,17 @@
 		"minimum": "10",
 		"verified": "10"
 	},
-	"url": "https://github.com/MrVauxs/speak-as",
+	"url": "https://github.com/MrVauxs/speaking-as",
 	"manifest": "This is replaced",
 	"download": "This is replaced",
-	"readme": "https://github.com/MrVauxs/speak-as",
-	"bugs": "https://github.com/MrVauxs/speak-as/issues",
-	"changelog": "https://github.com/MrVauxs/speak-as/blob/master/CHANGELOG.md",
+	"readme": "https://github.com/MrVauxs/speaking-as",
+	"bugs": "https://github.com/MrVauxs/speaking-as/issues",
+	"changelog": "https://github.com/MrVauxs/speaking-as/blob/master/CHANGELOG.md",
 	"esmodules": [
-		"scripts/speak-as.js"
+		"scripts/speaking-as.js"
 	],
 	"styles": [
-		"styles/speak-as.css"
+		"styles/speaking-as.css"
 	],
 	"languages": [
 		{
