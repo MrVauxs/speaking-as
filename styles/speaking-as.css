@@ -1,18 +1,31 @@
 .speaking-as--currentSpeaker {
     flex: 0 !important;
-    /* padding: 3px 0.5em; */
-    margin: 0px 8px;
+    padding: 5px 0 0 0;
+    opacity: 1;
+    margin: 0 0 0 3px;
+    transition: all 0.5s;
+}
+
+.speaking-as--currentSpeaker + #chat-controls {
+    padding: 0 0 0.5em 0;
+}
+
+.speaking-as--currentSpeaker.hide {
+    opacity: 0;
 }
 
 .speaking-as--currentSpeaker--text {
-    margin: 0 4px;
     font-size: var(--font-size-20);
     line-height: 28px;
+    position: relative;
+    bottom: 0.35em;
+    padding: 5px;
 }
 
 .speaking-as--currentSpeaker--icon {
     font-size: var(--font-size-20);
-    line-height: 28px;
+    height: 28px;
+    border: none;
 }
 
 .speaking-as--currentSpeaker #context-menu {

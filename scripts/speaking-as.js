@@ -112,13 +112,27 @@ const currentSpeakerDisplay = document.createElement('div');
 currentSpeakerDisplay.classList.add(CSS_CURRENT_SPEAKER);
 
 function updateSpeaker() {
-	currentSpeakerDisplay.innerHTML = `<i class="fas fa-user ${CSS_CURRENT_SPEAKER}--icon"></i> `
-	currentSpeakerDisplay.innerHTML += `<span class="${CSS_CURRENT_SPEAKER}--text">${ChatMessage.getSpeaker().alias}</span>`
+	currentSpeakerDisplay.classList.add('hide');
+	setTimeout(() => {
+		const tokenDocument = fromUuidSync(`Scene.${ChatMessage.getSpeaker().scene}.Token.${ChatMessage.getSpeaker().token}`)
+		if (tokenDocument) {
+			currentSpeakerDisplay.innerHTML = `<img src="${tokenDocument.texture.src}" class="speaking-as--currentSpeaker--icon" style="scale: ${tokenDocument.texture.scaleX}">`
+		} else {
+			currentSpeakerDisplay.innerHTML = `<img src="${game.user.avatar}" class="speaking-as--currentSpeaker--icon">`
+		}
+		currentSpeakerDisplay.innerHTML += `<span class="${CSS_CURRENT_SPEAKER}--text">${ChatMessage.getSpeaker().alias}</span>`
+	}, 500)
+	setTimeout(() => {
+		currentSpeakerDisplay.classList.remove('hide');
+	}, 500)
 }
 
 Hooks.once('renderChatLog', () => {
 	const chatControls = document.getElementById('chat-controls');
-	chatControls.parentNode.insertBefore(currentSpeakerDisplay, chatControls);
+	// "be last" magic trick from Supe
+	setTimeout(async () => {
+		chatControls.parentNode.insertBefore(currentSpeakerDisplay, chatControls);
+	}, 0);
 
 	const currentSpeakerToggleMenu = new ContextMenu(
 		$(chatControls.parentNode),
@@ -132,9 +146,10 @@ Hooks.once('renderChatLog', () => {
 		);
 		const speakerOptions = [];
 		for (let actor of actors) {
+			console.log(actor.prototypeToken.texture.src)
 			speakerOptions.push({
 				name: actor.name,
-				icon: '',
+				icon: "",
 				callback: () => {
 					selectActorToken(actor);
 				},
