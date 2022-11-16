@@ -1,1 +1,5 @@
-{}
+{
+    "speaking-as": {
+        "locked": "{module} has locked you to this speaker."
+    }
+}

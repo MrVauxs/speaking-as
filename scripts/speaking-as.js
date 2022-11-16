@@ -112,19 +112,57 @@ const currentSpeakerDisplay = document.createElement('div');
 currentSpeakerDisplay.classList.add(CSS_CURRENT_SPEAKER);
 
 function updateSpeaker() {
-	currentSpeakerDisplay.classList.add('hide');
-	setTimeout(() => {
-		const tokenDocument = fromUuidSync(`Scene.${ChatMessage.getSpeaker().scene}.Token.${ChatMessage.getSpeaker().token}`)
-		if (tokenDocument) {
-			currentSpeakerDisplay.innerHTML = `<img src="${tokenDocument.texture.src}" class="speaking-as--currentSpeaker--icon" style="scale: ${tokenDocument.texture.scaleX}">`
-		} else {
-			currentSpeakerDisplay.innerHTML = `<img src="${game.user.avatar}" class="speaking-as--currentSpeaker--icon">`
+	// Get the token speaker, if it doesn't exist it turns undefined.
+	let tokenDocument = fromUuidSync(`Scene.${ChatMessage.getSpeaker().scene}.Token.${ChatMessage.getSpeaker().token}`)
+	let name = ChatMessage.getSpeaker().alias
+	let newCurrentSpeakerDisplay = ""
+	let locked = false
+
+	// Compatibility with Cautious Gamemaster's Pack
+	// 1 - Disable Speaking as PC (GM ONLY, you can still speak as non-player owned tokens)
+	// 2 - Force in Character (only ASSIGNED characters)
+	// 3 - Force out of Character (always out of character)
+
+	// If the module is active
+	if (game.modules.get("CautiousGamemastersPack")?.active) {
+		// If the user is a player and is forced to be always out of character (3)
+		// If the user is a gamemaster and is forced to be always out of character (3)
+		if ((game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 3) || (!game.user.isGM && game.settings.get("CautiousGamemastersPack", "playerSpeakerMode") === 3)) {
+			name = game.user.name
+			locked = "Cautious Gamemaster's Pack"
 		}
-		currentSpeakerDisplay.innerHTML += `<span class="${CSS_CURRENT_SPEAKER}--text">${ChatMessage.getSpeaker().alias}</span>`
-	}, 250)
-	setTimeout(() => {
-		currentSpeakerDisplay.classList.remove('hide');
-	}, 250)
+		// If the user is a gamemaster and cannot speak as PC tokens (1)
+		if (game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 1 && tokenDocument?.actor?.hasPlayerOwner) {
+			name = game.user.name
+			locked = "Cautious Gamemaster's Pack"
+		}
+		// If the user is a gamemaster and is forced to be always in character (2)
+		if ((game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 2) || (!game.user.isGM && game.settings.get("CautiousGamemastersPack", "playerSpeakerMode") === 2)) {
+			tokenDocument = game.user.character.prototypeToken
+			name = game.user.character.name
+			locked = "Cautious Gamemaster's Pack"
+		}
+	}
+
+	// If a token is available and the user can speak as the character.
+	if (tokenDocument && name !== game.user.name) {
+		newCurrentSpeakerDisplay = `<img src="${tokenDocument.texture.src}" class="${CSS_CURRENT_SPEAKER}--icon" style="scale: ${tokenDocument.texture.scaleX}">`
+	} else {
+		newCurrentSpeakerDisplay = `<img src="${game.user.avatar}" class="${CSS_CURRENT_SPEAKER}--icon">`
+	}
+	newCurrentSpeakerDisplay += `<span class="${CSS_CURRENT_SPEAKER}--text">${name}</span>`
+	if (locked) newCurrentSpeakerDisplay += `<i class="fa-solid fa-lock ${CSS_CURRENT_SPEAKER}--text" style="line-height:revert;" data-tooltip="${game.i18n.format("speaking-as.locked", {module: locked})}"></i>`
+
+	// Only update if there are any changes.
+	if (newCurrentSpeakerDisplay !== currentSpeakerDisplay.innerHTML) {
+		// Hide
+		currentSpeakerDisplay.classList.add('hide');
+		// Unhide
+		setTimeout(() => {
+			currentSpeakerDisplay.innerHTML = newCurrentSpeakerDisplay
+			currentSpeakerDisplay.classList.remove('hide');
+		}, 250)
+	}
 }
 
 Hooks.once('renderChatLog', () => {
@@ -169,7 +207,7 @@ Hooks.once('renderChatLog', () => {
 	csd.dblclick((event) => panToSpeaker(ChatMessage.getSpeaker()));
 
 	// Remove Illandril's Chat Enhancements display
-	document.getElementsByClassName('illandril-chat-enhancements--currentSpeaker')[0].remove();
+	if (game.modules.get("illandril-chat-enhancements")?.active) document.getElementsByClassName('illandril-chat-enhancements--currentSpeaker')[0].remove();
 });
 
 Hooks.on('controlToken', updateSpeaker);
