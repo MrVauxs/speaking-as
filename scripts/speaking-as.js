@@ -121,10 +121,10 @@ function updateSpeaker() {
 			currentSpeakerDisplay.innerHTML = `<img src="${game.user.avatar}" class="speaking-as--currentSpeaker--icon">`
 		}
 		currentSpeakerDisplay.innerHTML += `<span class="${CSS_CURRENT_SPEAKER}--text">${ChatMessage.getSpeaker().alias}</span>`
-	}, 500)
+	}, 250)
 	setTimeout(() => {
 		currentSpeakerDisplay.classList.remove('hide');
-	}, 500)
+	}, 250)
 }
 
 Hooks.once('renderChatLog', () => {
@@ -167,6 +167,9 @@ Hooks.once('renderChatLog', () => {
 		hoverIn(event, ChatMessage.getSpeaker());
 	}, hoverOut);
 	csd.dblclick((event) => panToSpeaker(ChatMessage.getSpeaker()));
+
+	// Remove Illandril's Chat Enhancements display
+	document.getElementsByClassName('illandril-chat-enhancements--currentSpeaker')[0].remove();
 });
 
 Hooks.on('controlToken', updateSpeaker);
