@@ -184,7 +184,6 @@ Hooks.once('renderChatLog', () => {
 		);
 		const speakerOptions = [];
 		for (let actor of actors) {
-			console.log(actor.prototypeToken.texture.src)
 			speakerOptions.push({
 				name: actor.name,
 				icon: "",
