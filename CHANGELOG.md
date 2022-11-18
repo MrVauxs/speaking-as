@@ -1,3 +1,6 @@
+# 1.2.1
+- Replaced `scale` with `transform: scale()` to fix token scaling on electron browsers
+
 # 1.2.0
 - Resolved incompatibility with [Illandril's Chat Enhancements](https://github.com/illandril/FoundryVTT-chat-enhancements). #2
 - Added compatibility with [Cautious Gamemaster's Pack](https://github.com/cs96and/FoundryVTT-CGMP) settings. #1

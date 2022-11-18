@@ -146,7 +146,7 @@ function updateSpeaker() {
 
 	// If a token is available and the user can speak as the character.
 	if (tokenDocument && name !== game.user.name) {
-		newCurrentSpeakerDisplay = `<img src="${tokenDocument.texture.src}" class="${CSS_CURRENT_SPEAKER}--icon" style="scale: ${tokenDocument.texture.scaleX}">`
+		newCurrentSpeakerDisplay = `<img src="${tokenDocument.texture.src}" class="${CSS_CURRENT_SPEAKER}--icon" style="transform: scale(${tokenDocument.texture.scaleX})">`
 	} else {
 		newCurrentSpeakerDisplay = `<img src="${game.user.avatar}" class="${CSS_CURRENT_SPEAKER}--icon">`
 	}
