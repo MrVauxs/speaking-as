@@ -110,6 +110,58 @@ function updateMessageData(messageData, ...args) {
 	return messageData.updateSource.apply(messageData, args);
 }
 
+// https://github.com/cs96and/FoundryVTT-CGMP/blob/c9ff185fb5dcdde67815039dc78a5de409a24956/module/scripts/chat-resolver.js#L122
+function convertToOoc(messageData) {
+	// For all types of messages, change the speaker to the GM.
+	// Convert in-character message to out-of-character, and remove the actor and token.
+
+	const isInCharacter = CONST.CHAT_MESSAGE_TYPES.IC === messageData.type
+	const newType = ((isInCharacter) ? CONST.CHAT_MESSAGE_TYPES.OOC : messageData.type);
+	const newActor = ((isInCharacter) ? null : messageData.speaker.actor);
+	const newToken = ((isInCharacter) ? null : messageData.speaker.token);
+	const newTokenD = ((isInCharacter) ? null : messageData.token);
+	const newActorD = ((isInCharacter) ? null : messageData.actor);
+
+	const user = (messageData.user instanceof User ? messageData.user : game.users.get(messageData.user));
+	console.log(messageData)
+	updateMessageData(messageData, {
+		type: newType,
+		speaker: {
+			actor: newActor,
+			alias: user.name,
+			token: newToken
+		},
+		token: newTokenD,
+		actor: newActorD
+	});
+}
+
+const CHAT_MESSAGE_SUB_TYPES = {
+	NONE: 0,
+	DESC: 1,
+	AS: 2
+};
+
+function overrideMessage(messageData) {
+	if (mode() === 0) return;
+	switch (messageData?.flags?.cgmp?.subType) {
+		case CHAT_MESSAGE_SUB_TYPES.AS:
+		case CHAT_MESSAGE_SUB_TYPES.DESC:
+			break;
+
+		default:
+			convertToOoc(messageData, true);
+			break;
+	}
+	if (mode() === 1) {
+		$(`.${CSS_CURRENT_SPEAKER}--buttonInset`).attr("mode", 0)
+		$(`.${CSS_CURRENT_SPEAKER}--buttonInset`).removeClass("fa-circle-1")
+		updateSpeaker();
+	}
+}
+
+function mode() { return Number($(`.${CSS_CURRENT_SPEAKER}--buttonInset`).attr("mode")) }
+
 const CSS_CURRENT_SPEAKER = CSS_PREFIX + 'currentSpeaker';
 
 // Create our div
@@ -123,16 +175,31 @@ let image = `<img class="${CSS_CURRENT_SPEAKER}--icon">`
 let text = `<span class="${CSS_CURRENT_SPEAKER}--text"></span>`
 
 // Add buttons / indicators
-let locked = `<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked" style="line-height:revert;"></i>`
-let oocButton = ""
+let locked = `<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked"></i>`
 
-$(currentSpeakerDisplay).append(image).append(text).append(locked)
+// Once: <i class="fa-solid fa-circle-1"></i>
+// Repeat: <i class="fa-solid fa-repeat"></i>
+let oocButton = $($.parseHTML(`<i class="fa-solid fa-user ${CSS_CURRENT_SPEAKER}--button" data-tooltip=""><i class="${CSS_CURRENT_SPEAKER}--buttonInset fa-solid fa-inverse" mode="0"></i></i>`))
+oocButton.click(function () {
+	var classes = ["", "fa-circle-1", "fa-repeat"]
+	$(`.${CSS_CURRENT_SPEAKER}--buttonInset`).attr("mode", mode() >= 2 ? 0 : mode() + 1)
+	$(`.${CSS_CURRENT_SPEAKER}--buttonInset`).removeClass(classes.at(mode() - 1) ?? "").addClass(classes.at(mode()))
+
+	updateSpeaker();
+})
+
+$(currentSpeakerDisplay).append(image).append(text).append(locked).append(oocButton)
 
 function updateSpeaker() {
 	// Get the token speaker, if it doesn't exist it turns undefined.
 	let tokenDocument = fromUuidSync(`Scene.${ChatMessage.getSpeaker().scene}.Token.${ChatMessage.getSpeaker().token}`)
 	let name = ChatMessage.getSpeaker().alias
 	let lockReason = false
+
+	if (mode() !== 0) {
+		lockReason = game.i18n.localize("speaking-as.self-locked")
+		name = game.user.name
+	}
 
 	// Compatibility with Cautious Gamemaster's Pack
 	// 1 - Disable Speaking as PC (GM ONLY, you can still speak as non-player owned tokens)
@@ -145,18 +212,18 @@ function updateSpeaker() {
 		// If the user is a gamemaster and is forced to be always out of character (3)
 		if ((game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 3) || (!game.user.isGM && game.settings.get("CautiousGamemastersPack", "playerSpeakerMode") === 3)) {
 			name = game.user.name
-			lockReason = "Cautious Gamemaster's Pack"
+			lockReason = `${game.i18n.format("speaking-as.locked", { module: "Cautious Gamemaster's Pack" })}`
 		}
 		// If the user is a gamemaster and cannot speak as PC tokens (1)
 		if (game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 1 && tokenDocument?.actor?.hasPlayerOwner) {
 			name = game.user.name
-			lockReason = "Cautious Gamemaster's Pack"
+			lockReason = `${game.i18n.format("speaking-as.locked", { module: "Cautious Gamemaster's Pack" })}`
 		}
 		// If the user is a gamemaster and is forced to be always in character (2)
 		if ((game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 2) || (!game.user.isGM && game.settings.get("CautiousGamemastersPack", "playerSpeakerMode") === 2)) {
 			tokenDocument = game.user.character.prototypeToken
 			name = game.user.character.name
-			lockReason = "Cautious Gamemaster's Pack"
+			lockReason = `${game.i18n.format("speaking-as.locked", { module: "Cautious Gamemaster's Pack" })}`
 		}
 	}
 
@@ -167,16 +234,17 @@ function updateSpeaker() {
 		image = `<img src="${game.user.avatar}" class="${CSS_CURRENT_SPEAKER}--icon">`
 	}
 	text = `<span class="${CSS_CURRENT_SPEAKER}--text">${name}</span>`
-	locked = $($.parseHTML(`<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked" style="line-height:revert;"></i>`))
+	locked = $($.parseHTML(`<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked" data-tooltip="${game.i18n.localize("speaking-as.unlocked")}"></i>`))
 	if (lockReason) {
-		$(locked).attr("data-tooltip", `${game.i18n.format("speaking-as.locked", { module: lockReason })}`)
+		$(locked).attr("data-tooltip", lockReason)
 		$(locked).removeClass("fa-unlock").addClass("fa-lock")
 	}
 
-	// Reset currentSpeakerDisplay, add image, add name, add locked, add OOC buttons
-	if ($(`${CSS_CURRENT_SPEAKER}--icon`)[0] !== image) $(`.${CSS_CURRENT_SPEAKER}--icon`).replaceWith(image);
-	if ($(`${CSS_CURRENT_SPEAKER}--text`)[0] !== text) $(`.${CSS_CURRENT_SPEAKER}--text`).replaceWith(text);
-	if ($(`${CSS_CURRENT_SPEAKER}--locked`)[0] !== locked) $(`.${CSS_CURRENT_SPEAKER}--locked`).replaceWith(locked);
+	$(image).on("load", () => {
+		if ($(`${CSS_CURRENT_SPEAKER}--icon`)[0] !== image) $(`.${CSS_CURRENT_SPEAKER}--icon`).replaceWith(image);
+		if ($(`${CSS_CURRENT_SPEAKER}--text`)[0] !== text) $(`.${CSS_CURRENT_SPEAKER}--text`).replaceWith(text);
+		if ($(`${CSS_CURRENT_SPEAKER}--locked`)[0] !== locked) $(`.${CSS_CURRENT_SPEAKER}--locked`).replaceWith(locked);
+	})
 }
 
 Hooks.once('renderChatLog', () => {
@@ -184,6 +252,8 @@ Hooks.once('renderChatLog', () => {
 	// "be last" magic trick from Supe
 	setTimeout(async () => {
 		chatControls.parentNode.insertBefore(currentSpeakerDisplay, chatControls);
+		// Apparently game.i18n.localize is not loaded when the button is added so it's here instead.
+		$(`.${CSS_CURRENT_SPEAKER}--button`).attr("data-tooltip", game.i18n.localize("speaking-as.buttonHint"))
 	}, 0);
 
 	const currentSpeakerToggleMenu = new ContextMenu(
@@ -225,3 +295,4 @@ Hooks.once('renderChatLog', () => {
 });
 
 Hooks.on('controlToken', updateSpeaker);
+Hooks.on('preCreateChatMessage', overrideMessage);

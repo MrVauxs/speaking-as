@@ -1,3 +1,11 @@
+# 1.3.0
+- Rewritten most of the module and styling.
+    - Images should load now instantenously, rather than jitter.
+    - Fading in and out has been removed.
+    - The locked icon has been moved to the right and is now transparent when not locked.
+- Added a new button to speak out of character for a single, or for every message. Toggleable.
+- Added compatibility with PF2e Dorako UI module.
+
 # 1.2.1
 - Replaced `scale` with `transform: scale()` to fix token scaling on electron browsers
 

@@ -1,5 +1,8 @@
 {
     "speaking-as": {
-        "locked": "{module} has locked you to this speaker."
+        "unlocked": "Nothing is preventing you from speaking as this character.",
+        "locked": "{module} has locked you to this speaker.",
+        "self-locked": "You have locked yourself to speak out of character.",
+        "buttonHint": "Click to speak out of character for the next message. Double click to do so until you click again."
     }
 }
