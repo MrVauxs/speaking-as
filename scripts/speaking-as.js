@@ -106,17 +106,33 @@ const selectActorToken = (actor) => {
 	panToToken(token);
 };
 
+function updateMessageData(messageData, ...args) {
+	return messageData.updateSource.apply(messageData, args);
+}
+
 const CSS_CURRENT_SPEAKER = CSS_PREFIX + 'currentSpeaker';
 
+// Create our div
 const currentSpeakerDisplay = document.createElement('div');
 currentSpeakerDisplay.classList.add(CSS_CURRENT_SPEAKER);
+
+// Add images
+let image = `<img class="${CSS_CURRENT_SPEAKER}--icon">`
+
+// Add name
+let text = `<span class="${CSS_CURRENT_SPEAKER}--text"></span>`
+
+// Add buttons / indicators
+let locked = `<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked" style="line-height:revert;"></i>`
+let oocButton = ""
+
+$(currentSpeakerDisplay).append(image).append(text).append(locked)
 
 function updateSpeaker() {
 	// Get the token speaker, if it doesn't exist it turns undefined.
 	let tokenDocument = fromUuidSync(`Scene.${ChatMessage.getSpeaker().scene}.Token.${ChatMessage.getSpeaker().token}`)
 	let name = ChatMessage.getSpeaker().alias
-	let newCurrentSpeakerDisplay = ""
-	let locked = false
+	let lockReason = false
 
 	// Compatibility with Cautious Gamemaster's Pack
 	// 1 - Disable Speaking as PC (GM ONLY, you can still speak as non-player owned tokens)
@@ -129,40 +145,38 @@ function updateSpeaker() {
 		// If the user is a gamemaster and is forced to be always out of character (3)
 		if ((game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 3) || (!game.user.isGM && game.settings.get("CautiousGamemastersPack", "playerSpeakerMode") === 3)) {
 			name = game.user.name
-			locked = "Cautious Gamemaster's Pack"
+			lockReason = "Cautious Gamemaster's Pack"
 		}
 		// If the user is a gamemaster and cannot speak as PC tokens (1)
 		if (game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 1 && tokenDocument?.actor?.hasPlayerOwner) {
 			name = game.user.name
-			locked = "Cautious Gamemaster's Pack"
+			lockReason = "Cautious Gamemaster's Pack"
 		}
 		// If the user is a gamemaster and is forced to be always in character (2)
 		if ((game.user.isGM && game.settings.get("CautiousGamemastersPack", "gmSpeakerMode") === 2) || (!game.user.isGM && game.settings.get("CautiousGamemastersPack", "playerSpeakerMode") === 2)) {
 			tokenDocument = game.user.character.prototypeToken
 			name = game.user.character.name
-			locked = "Cautious Gamemaster's Pack"
+			lockReason = "Cautious Gamemaster's Pack"
 		}
 	}
 
 	// If a token is available and the user can speak as the character.
 	if (tokenDocument && name !== game.user.name) {
-		newCurrentSpeakerDisplay = `<img src="${tokenDocument.texture.src}" class="${CSS_CURRENT_SPEAKER}--icon" style="transform: scale(${tokenDocument.texture.scaleX})">`
+		image = `<img src="${tokenDocument.texture.src}" class="${CSS_CURRENT_SPEAKER}--icon" style="transform: scale(${tokenDocument.texture.scaleX})">`
 	} else {
-		newCurrentSpeakerDisplay = `<img src="${game.user.avatar}" class="${CSS_CURRENT_SPEAKER}--icon">`
+		image = `<img src="${game.user.avatar}" class="${CSS_CURRENT_SPEAKER}--icon">`
 	}
-	newCurrentSpeakerDisplay += `<span class="${CSS_CURRENT_SPEAKER}--text">${name}</span>`
-	if (locked) newCurrentSpeakerDisplay += `<i class="fa-solid fa-lock ${CSS_CURRENT_SPEAKER}--text" style="line-height:revert;" data-tooltip="${game.i18n.format("speaking-as.locked", {module: locked})}"></i>`
+	text = `<span class="${CSS_CURRENT_SPEAKER}--text">${name}</span>`
+	locked = $($.parseHTML(`<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked" style="line-height:revert;"></i>`))
+	if (lockReason) {
+		$(locked).attr("data-tooltip", `${game.i18n.format("speaking-as.locked", { module: lockReason })}`)
+		$(locked).removeClass("fa-unlock").addClass("fa-lock")
+	}
 
-	// Only update if there are any changes.
-	if (newCurrentSpeakerDisplay !== currentSpeakerDisplay.innerHTML) {
-		// Hide
-		currentSpeakerDisplay.classList.add('hide');
-		// Unhide
-		setTimeout(() => {
-			currentSpeakerDisplay.innerHTML = newCurrentSpeakerDisplay
-			currentSpeakerDisplay.classList.remove('hide');
-		}, 250)
-	}
+	// Reset currentSpeakerDisplay, add image, add name, add locked, add OOC buttons
+	if ($(`${CSS_CURRENT_SPEAKER}--icon`)[0] !== image) $(`.${CSS_CURRENT_SPEAKER}--icon`).replaceWith(image);
+	if ($(`${CSS_CURRENT_SPEAKER}--text`)[0] !== text) $(`.${CSS_CURRENT_SPEAKER}--text`).replaceWith(text);
+	if ($(`${CSS_CURRENT_SPEAKER}--locked`)[0] !== locked) $(`.${CSS_CURRENT_SPEAKER}--locked`).replaceWith(locked);
 }
 
 Hooks.once('renderChatLog', () => {
@@ -196,8 +210,9 @@ Hooks.once('renderChatLog', () => {
 		originalRender(...args);
 	};
 
-
-	updateSpeaker();
+	setTimeout(async () => {
+		updateSpeaker();
+	}, 0);
 
 	const csd = $(currentSpeakerDisplay);
 	csd.hover((event) => {

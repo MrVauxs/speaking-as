@@ -1,6 +1,7 @@
 .speaking-as--currentSpeaker {
+    height: 45px;
     flex: 0 !important;
-    padding: 5px 0 0 0;
+    padding: 7px 0 0 0;
     opacity: 1;
     margin: 0 0 0 3px;
     transition: all 0.5s;
@@ -14,7 +15,25 @@
     opacity: 0;
 }
 
+.speaking-as--currentSpeaker--locked.fa-unlock {
+    opacity: 0.2;
+}
+
+.speaking-as--currentSpeaker--locked.fa-lock {
+    opacity: 1;
+}
+
+.speaking-as--currentSpeaker--locked {
+    transition: all 0.5s;
+    float: right;
+    font-size: var(--font-size-24);
+    line-height: 28px;
+    position: relative;
+    padding: 2px 7px;
+}
+
 .speaking-as--currentSpeaker--text {
+    transition: all 0.5s;
     font-size: var(--font-size-20);
     line-height: 28px;
     position: relative;
@@ -23,6 +42,7 @@
 }
 
 .speaking-as--currentSpeaker--icon {
+    transition: all 0.5s;
     font-size: var(--font-size-20);
     height: 28px;
     border: none;
