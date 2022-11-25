@@ -123,7 +123,7 @@ function convertToOoc(messageData) {
 	const newActorD = ((isInCharacter) ? null : messageData.actor);
 
 	const user = (messageData.user instanceof User ? messageData.user : game.users.get(messageData.user));
-	console.log(messageData)
+
 	updateMessageData(messageData, {
 		type: newType,
 		speaker: {
