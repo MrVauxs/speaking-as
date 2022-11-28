@@ -1,5 +1,7 @@
 # 1.3.1
 - Added Polish Localization Files.
+- Added glow when hovering over the speaker name or image if you can pan to it.
+- Fixed the hover on speaker not deselecting when you move the mouse off the speaker.
 
 # 1.3.0
 - Rewritten most of the module and styling.
