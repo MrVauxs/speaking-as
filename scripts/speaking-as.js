@@ -78,7 +78,7 @@ const hoverIn = (event, speaker) => {
 };
 
 const hoverOut = (event) => {
-	if (lastHoveredToken && lastHoveredToken._hover) {
+	if (lastHoveredToken) {
 		event.fromChat = true;
 		lastHoveredToken._onHoverOut(event);
 		lastHoveredToken = null;
@@ -201,6 +201,16 @@ function updateSpeaker() {
 		name = game.user.name
 	}
 
+	const speakerObject = name !== game.user.name ? {
+		actor: tokenDocument?.actor?.id,
+		alias: name,
+		scene: tokenDocument?.parent?.id ?? game.user.viewedScene,
+		token: tokenDocument?.id,
+	} : {
+		alias: name,
+		scene: game.user.viewedScene,
+	}
+
 	// Compatibility with Cautious Gamemaster's Pack
 	// 1 - Disable Speaking as PC (GM ONLY, you can still speak as non-player owned tokens)
 	// 2 - Force in Character (only ASSIGNED characters)
@@ -234,16 +244,36 @@ function updateSpeaker() {
 		image = `<img src="${game.user.avatar}" class="${CSS_CURRENT_SPEAKER}--icon">`
 	}
 	text = `<span class="${CSS_CURRENT_SPEAKER}--text">${name}</span>`
+
 	locked = $($.parseHTML(`<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked" data-tooltip="${game.i18n.localize("speaking-as.unlocked")}"></i>`))
 	if (lockReason) {
 		$(locked).attr("data-tooltip", lockReason)
 		$(locked).removeClass("fa-unlock").addClass("fa-lock")
 	}
 
+	image = $(image)
+	text = $(text)
+	locked = $(locked)
+
+	var textAndImage = $().add(image).add(text)
+	textAndImage
+		// hover over token
+		.hover((event) => {
+			hoverIn(event, speakerObject);
+		}, (event) => {
+			hoverOut(event, speakerObject)
+		})
+		// add hover glow on token
+		.hover(function() {
+			if (name !== game.user.name) $(this).toggleClass(`shadow`);
+		})
+		// double click to pan to the token
+		.dblclick(() => panToSpeaker(speakerObject))
+
 	$(image).on("load", () => {
-		if ($(`${CSS_CURRENT_SPEAKER}--icon`)[0] !== image) $(`.${CSS_CURRENT_SPEAKER}--icon`).replaceWith(image);
-		if ($(`${CSS_CURRENT_SPEAKER}--text`)[0] !== text) $(`.${CSS_CURRENT_SPEAKER}--text`).replaceWith(text);
-		if ($(`${CSS_CURRENT_SPEAKER}--locked`)[0] !== locked) $(`.${CSS_CURRENT_SPEAKER}--locked`).replaceWith(locked);
+		if ($(`${CSS_CURRENT_SPEAKER}--icon`).html() !== image.html()) $(`.${CSS_CURRENT_SPEAKER}--icon`).replaceWith(image);
+		if ($(`${CSS_CURRENT_SPEAKER}--text`).html() !== text.html()) $(`.${CSS_CURRENT_SPEAKER}--text`).replaceWith(text);
+		if ($(`${CSS_CURRENT_SPEAKER}--locked`).html() !== locked.html()) $(`.${CSS_CURRENT_SPEAKER}--locked`).replaceWith(locked);
 	})
 }
 
@@ -283,12 +313,6 @@ Hooks.once('renderChatLog', () => {
 	setTimeout(async () => {
 		updateSpeaker();
 	}, 0);
-
-	const csd = $(currentSpeakerDisplay);
-	csd.hover((event) => {
-		hoverIn(event, ChatMessage.getSpeaker());
-	}, hoverOut);
-	csd.dblclick((event) => panToSpeaker(ChatMessage.getSpeaker()));
 
 	// Remove Illandril's Chat Enhancements display
 	if (game.modules.get("illandril-chat-enhancements")?.active) document.getElementsByClassName('illandril-chat-enhancements--currentSpeaker')[0].remove();

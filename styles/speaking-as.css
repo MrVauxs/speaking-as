@@ -70,3 +70,10 @@
     max-height: 50vh;
     overflow-y: auto;
 }
+
+.speaking-as--currentSpeaker--text.shadow {
+    text-shadow: 0 0 6px gold;
+}
+.speaking-as--currentSpeaker--icon.shadow {
+    filter: drop-shadow(0 0 3px gold);
+}
