@@ -1,0 +1,8 @@
+{
+	"speaking-as": {
+		"unlocked": "Nic nie wstrzymuje cię od mówienia jako ta postać.",
+		"locked": "{module} wstrzymuje cię od mówienia jako ta postać.",
+		"self-locked": "Zablokowałeś/aś się, by mówić poza tą postacią.",
+		"buttonHint": "Kliknij, aby mówić poza postacią przez następną wiadomość. Kliknij dwukrotnie, aby to robić aż do ponownego kliknięcia."
+	}
+}
