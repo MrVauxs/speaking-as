@@ -2,6 +2,7 @@
 - Added Polish Localization Files.
 - Added glow when hovering over the speaker name or image if you can pan to it.
 - Fixed the hover on speaker not deselecting when you move the mouse off the speaker.
+- Fixed double clicking on the OOC button bringing you to your token.
 
 # 1.3.0
 - Rewritten most of the module and styling.
