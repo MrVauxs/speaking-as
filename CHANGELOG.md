@@ -1,3 +1,6 @@
+# 1.3.1
+- Added Polish Localization Files.
+
 # 1.3.0
 - Rewritten most of the module and styling.
     - Images should load now instantenously, rather than jitter.
