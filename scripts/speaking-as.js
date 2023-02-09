@@ -180,7 +180,8 @@ let locked = `<i class="fa-solid fa-unlock ${CSS_CURRENT_SPEAKER}--locked"></i>`
 // Once: <i class="fa-solid fa-circle-1"></i>
 // Repeat: <i class="fa-solid fa-repeat"></i>
 let oocButton = $($.parseHTML(`<i class="fa-solid fa-user ${CSS_CURRENT_SPEAKER}--button" data-tooltip=""><i class="${CSS_CURRENT_SPEAKER}--buttonInset fa-solid fa-inverse" mode="0"></i></i>`))
-oocButton.click(function () {
+oocButton.click(function (event) {
+	event.stopPropagation();
 	var classes = ["", "fa-circle-1", "fa-repeat"]
 	$(`.${CSS_CURRENT_SPEAKER}--buttonInset`).attr("mode", mode() >= 2 ? 0 : mode() + 1)
 	$(`.${CSS_CURRENT_SPEAKER}--buttonInset`).removeClass(classes.at(mode() - 1) ?? "").addClass(classes.at(mode()))
