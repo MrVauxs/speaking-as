@@ -1,1 +1,8 @@
-{}
+{
+	"speaking-as": {
+		"unlocked": "Rien ne vous empêche de parler en tant que ce personnage.",
+		"locked": "{module} vous a verrouillé sur cet orateur.",
+		"self-locked": "Vous vous êtes verrouillé pour parler hors votre personnage.",
+		"buttonHint": "Cliquez pour parler en dehors du personnage pour le prochain message. Double-cliquez pour continuer ainsi jusqu'à ce que vous cliquiez à nouveau."
+	}
+}
