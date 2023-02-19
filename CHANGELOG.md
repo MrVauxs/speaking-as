@@ -1,3 +1,6 @@
+# 1.4.0
+- Added French and Simplified Chinese Localization Files.
+
 # 1.3.1
 - Added Polish Localization Files.
 - Added glow when hovering over the speaker name or image if you can pan to it.
