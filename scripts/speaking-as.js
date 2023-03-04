@@ -316,7 +316,7 @@ Hooks.once('renderChatLog', () => {
 	}, 0);
 
 	// Remove Illandril's Chat Enhancements display
-	if (game.modules.get("illandril-chat-enhancements")?.active) document.getElementsByClassName('illandril-chat-enhancements--currentSpeaker')[0].remove();
+	if (game.modules.get("illandril-chat-enhancements")?.active) document.getElementsByClassName('illandril-chat-enhancements--current-speaker')[0].remove();
 });
 
 Hooks.on('controlToken', updateSpeaker);
