@@ -11,5 +11,9 @@ Displays the character you are speaking as. You can right click the text to brin
 
 Majority of the functionality is attributed to [Illandril's Chat Enhancements](https://github.com/illandril/FoundryVTT-chat-enhancements) and [Cautious Gamemaster's Pack](https://github.com/cs96and/FoundryVTT-CGMP), but with large changes to formatting.
 
-## **Video Preview:** https://files.catbox.moe/bja2zm.mp4
+## Previews
+https://user-images.githubusercontent.com/32039708/222933730-ee790942-333a-4eb8-99ea-7fdbfe01e385.mp4
+
+https://user-images.githubusercontent.com/32039708/222933734-dad0714e-c4d1-4fcf-88a7-6b656da358c7.mp4
+
 *UI and Chat Message Styling attributed to [PF2e Dorako UI](https://github.com/Dorako/pf2e-dorako-ui)*
