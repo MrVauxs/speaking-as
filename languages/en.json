@@ -3,6 +3,13 @@
         "unlocked": "Nothing is preventing you from speaking as this character.",
         "locked": "{module} has locked you to this speaker.",
         "self-locked": "You have locked yourself to speak out of character.",
-        "buttonHint": "Click to speak out of character for the next message. Double click to do so until you click again."
+        "buttonHint": "Click to speak out of character for the next message. Double click to do so until you click again.",
+        "warning": "You are using reserved ({characters}) letters when speaking out of character! Did you want to speak in-character instead?",
+        "settings": {
+            "warningCharacters": {
+                "name": "Warn if Speaking with Special Characters",
+                "hint": "Highlights the chatbox if you are using reserved characters such as \"quotes\" or other characters of your choice when speaking out of character. If the setting is empty, no warnings will be given. This uses Regex."
+            }
+        }
     }
 }

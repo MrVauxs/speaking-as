@@ -74,6 +74,25 @@
 .speaking-as--currentSpeaker--text.shadow {
     text-shadow: 0 0 6px gold;
 }
+
 .speaking-as--currentSpeaker--icon.shadow {
     filter: drop-shadow(0 0 3px gold);
+}
+
+.speaking-as--warning {
+    animation: warning-shadow ease-in-out 2s infinite;
+}
+
+@keyframes warning-shadow {
+    0% {
+        filter: drop-shadow(0 0 0px red);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 16px red);
+    }
+
+    100% {
+        filter: drop-shadow(0 0 0px red);
+    }
 }

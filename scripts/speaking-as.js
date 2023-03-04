@@ -1,15 +1,13 @@
-/*
 Hooks.on("init", async () => {
-	game.settings.register("multi-roll", "hideNPCs", {
-		scope: "world",
+	game.settings.register("speaking-as", "warningCharacters", {
+		scope: "user",
 		config: true,
-		name: "Hide non-Player Token Targets",
-		hint: "Hides not owned by players tokens from the target list of a damage roll.",
-		type: Boolean,
-		default: false
+		name: game.i18n.localize("speaking-as.settings.warningCharacters.name"),
+		hint: game.i18n.localize("speaking-as.settings.warningCharacters.hint"),
+		type: String,
+		default: '".+"',
 	});
 });
-*/
 
 const KEY = 'speaking-as';
 const NAME = "Speaking As";
@@ -265,7 +263,7 @@ function updateSpeaker() {
 			hoverOut(event, speakerObject)
 		})
 		// add hover glow on token
-		.hover(function() {
+		.hover(function () {
 			if (name !== game.user.name) $(this).toggleClass(`shadow`);
 		})
 		// double click to pan to the token
@@ -275,6 +273,8 @@ function updateSpeaker() {
 		if ($(`${CSS_CURRENT_SPEAKER}--icon`).html() !== image.html()) $(`.${CSS_CURRENT_SPEAKER}--icon`).replaceWith(image);
 		if ($(`${CSS_CURRENT_SPEAKER}--text`).html() !== text.html()) $(`.${CSS_CURRENT_SPEAKER}--text`).replaceWith(text);
 		if ($(`${CSS_CURRENT_SPEAKER}--locked`).html() !== locked.html()) $(`.${CSS_CURRENT_SPEAKER}--locked`).replaceWith(locked);
+
+		setTimeout(checkWarn(), 0)
 	})
 }
 
@@ -313,6 +313,13 @@ Hooks.once('renderChatLog', () => {
 
 	setTimeout(async () => {
 		updateSpeaker();
+		$("#chat-message").on("input", () => {
+			checkWarn();
+		});
+		$("#chat-message").on("keydown", () => {
+			$("#chat-message").removeClass(CSS_PREFIX + "warning");
+			game.tooltip.deactivate();
+		});
 	}, 0);
 
 	// Remove Illandril's Chat Enhancements display
@@ -321,3 +328,24 @@ Hooks.once('renderChatLog', () => {
 
 Hooks.on('controlToken', updateSpeaker);
 Hooks.on('preCreateChatMessage', overrideMessage);
+
+function checkWarn() {
+	// Add a warning on key enter if the textarea contains quotes, as if you were talking in character.
+	if (
+		$(".speaking-as--currentSpeaker--text").text() !== game.user.name || // Return if speaking out of character
+		["/ic", "/ooc", "/emote"].some(str => $("#chat-message").val().includes(str)) // Return if the message contains a command that would deliberately make you speak in or out of character
+	) {
+		$("#chat-message").removeClass(CSS_PREFIX + "warning");
+		game.tooltip.deactivate();
+		return;
+	};
+
+	const regex = new RegExp(game.settings.get("speaking-as", "warningCharacters"));
+	if (regex.test($("#chat-message").val())) {
+		$("#chat-message").addClass(CSS_PREFIX + "warning");
+		game.tooltip.activate($("#chat-message")[0], { text: game.i18n.format("speaking-as.warning", { characters: game.settings.get("speaking-as", "warningCharacters") }), direction: "LEFT" });
+	} else {
+		$("#chat-message").removeClass(CSS_PREFIX + "warning");
+		game.tooltip.deactivate();
+	}
+}
