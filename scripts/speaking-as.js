@@ -332,6 +332,7 @@ Hooks.on('preCreateChatMessage', overrideMessage);
 function checkWarn() {
 	// Add a warning on key enter if the textarea contains quotes, as if you were talking in character.
 	if (
+		game.settings.get("speaking-as", "warningCharacters") === "" ||
 		$(".speaking-as--currentSpeaker--text").text() !== game.user.name || // Return if speaking out of character
 		["/ic", "/ooc", "/emote"].some(str => $("#chat-message").val().includes(str)) // Return if the message contains a command that would deliberately make you speak in or out of character
 	) {

@@ -1,3 +1,6 @@
+# 1.4.1
+- Fixed a bug where you could not turn off the message warning.
+
 # 1.4.0
 - Added French and Simplified Chinese Localization Files.
 - Fixed the module not removing Illandril's Chat Enhancements redundant "You: <Name>" text.
