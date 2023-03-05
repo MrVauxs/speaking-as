@@ -4,7 +4,7 @@
 # 1.4.0
 - Added French and Simplified Chinese Localization Files.
 - Fixed the module not removing Illandril's Chat Enhancements redundant "You: <Name>" text.
-- Added a warning if you are using (customizable) reserved chacaters, such as "speaking in quotes". The warning is disabled when talking in-character.
+- Added a warning if you are using (customizable) reserved characters, such as "speaking in quotes". The warning is disabled when talking in-character.
 
 # 1.3.1
 - Added Polish Localization Files.
