@@ -3,6 +3,13 @@
 		"unlocked": "Rien ne vous empêche de parler en tant que ce personnage.",
 		"locked": "{module} vous a verrouillé sur cet orateur.",
 		"self-locked": "Vous vous êtes verrouillé pour parler hors votre personnage.",
-		"buttonHint": "Cliquez pour parler en dehors du personnage pour le prochain message. Double-cliquez pour continuer ainsi jusqu'à ce que vous cliquiez à nouveau."
+		"buttonHint": "Cliquez pour parler en dehors du personnage pour le prochain message. Double-cliquez pour continuer ainsi jusqu'à ce que vous cliquiez à nouveau.",
+		"settings": {
+			"warningCharacters": {
+				"name": "Avertir si vous parlez avec des Caractères spéciaux",
+				"hint": "Illumine la fenêtre de conversation si vous utilisez des caractères réservés tel que \"parenthèses\" ou d'autres caractères de votre choix lorsque vous parle en dehors de votre personnage. Si le réglage est vide, aucun avertissement ne sera donné. Cela utilise les regex."
+			}
+		},
+		"warning": "Vous êtes en train d'utiliser les lettres ({characters}) lorsque vous parlez hors de votre personnage ! Ne voulez-vous pas plutôt parler en tant que personnage ?"
 	}
 }
