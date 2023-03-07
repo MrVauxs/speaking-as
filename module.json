@@ -44,7 +44,7 @@
 		{
 			"lang": "cn",
 			"name": "中文（简体）",
-			"path": "languages/zh_Hans.json"
+			"path": "languages/cn.json"
 		}
 	]
 }
