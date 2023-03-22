@@ -5,7 +5,7 @@ Hooks.on("init", async () => {
 		name: game.i18n.localize("speaking-as.settings.warningCharacters.name"),
 		hint: game.i18n.localize("speaking-as.settings.warningCharacters.hint"),
 		type: String,
-		default: '".+"',
+		default: '\".+\"',
 	});
 });
 

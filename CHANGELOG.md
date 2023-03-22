@@ -1,3 +1,6 @@
+# 1.4.2
+- Fixed the default setting being bugged.
+
 # 1.4.1
 - Fixed a bug where you could not turn off the message warning.
 
