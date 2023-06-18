@@ -3,6 +3,13 @@
 		"unlocked": "Nic nie wstrzymuje cię od mówienia jako ta postać.",
 		"locked": "{module} wstrzymuje cię od mówienia jako ta postać.",
 		"self-locked": "Zablokowałeś/aś się, by mówić poza tą postacią.",
-		"buttonHint": "Kliknij, aby mówić poza postacią przez następną wiadomość. Kliknij dwukrotnie, aby to robić aż do ponownego kliknięcia."
+		"buttonHint": "Kliknij, aby mówić poza postacią przez następną wiadomość. Kliknij dwukrotnie, aby to robić aż do ponownego kliknięcia.",
+		"warning": "Używasz zastrzeżonych ({characters}) liter podczas mówienia poza postacią! Czy chciałeś zamiast tego mówić w charakterze?",
+		"settings": {
+			"warningCharacters": {
+				"name": "Ostrzeżenie w przypadku wypowiadania znaków specjalnych",
+				"hint": "Podświetla okno czatu, jeśli używasz zastrzeżonych znaków, takich jak \"cudzysłowy\" lub innych wybranych znaków podczas mówienia poza postacią. Jeśli ustawienie jest puste, ostrzeżenia nie będą wyświetlane. Używa Regex."
+			}
+		}
 	}
 }
