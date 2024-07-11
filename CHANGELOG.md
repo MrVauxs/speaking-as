@@ -1,3 +1,12 @@
+# 1.4.5
+- Update verified version to V12.
+
+# 1.4.4
+- Update verified version to V11.
+
+# 1.4.3
+- Updated Polish localization.
+
 # 1.4.2
 - Fixed the default setting being bugged.
 
